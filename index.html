@@ -3,175 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio</title>
+    <title>Snake Game</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-
-        .container {
             display: flex;
+            justify-content: center;
+            align-items: center;
             height: 100vh;
-        }
-
-        .sidebar {
-            width: 25%;
-            background-color: #1e90ff;
+            background-color: #282c34;
             color: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 20px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            font-family: Arial, sans-serif;
         }
-
-        .sidebar h2 {
-            margin-bottom: 20px;
-        }
-
-        .sidebar a {
-            color: white;
-            text-decoration: none;
-            margin-bottom: 15px;
-            display: block;
-            font-weight: bold;
-            transition: color 0.3s ease;
-        }
-
-        .sidebar a:hover {
-            color: #ffcc00;
-        }
-
-        .main-content {
-            flex: 1;
-            padding: 40px;
-            overflow-y: auto;
-        }
-
-        section {
-            margin-bottom: 50px;
-        }
-
-        section h2 {
-            border-bottom: 2px solid #1e90ff;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            color: #1e90ff;
-        }
-
-        .profile-picture {
-            float: right;
-            margin-left: 20px;
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .projects, .certifications {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .card {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            flex: 1 1 calc(33% - 40px);
-            max-width: calc(33% - 40px);
-        }
-
-        .card img {
-            max-width: 100%;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
-
-        .card h3 {
-            margin: 10px 0;
-        }
-
-        footer {
-            text-align: center;
-            padding: 10px;
-            background: #1e90ff;
-            color: white;
-            font-size: 14px;
+        canvas {
+            border: 2px solid white;
+            background-color: black;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="sidebar">
-            <h2>My Portfolio</h2>
-            <a href="#about">About Me</a>
-            <a href="#projects">Projects</a>
-            <a href="#certifications">Certifications</a>
-            <a href="#contact">Contact</a>
-        </div>
-        <div class="main-content">
-            <section id="about">
-                <h2>About Me</h2>
-                <img src="profile.jpg" alt="Profile Picture" class="profile-picture">
-                <p>Hello! I am a B.Sc. PCM (Physics, Chemistry, Mathematics) student passionate about problem-solving and continuous learning. I enjoy applying my analytical skills to make a meaningful impact.</p>
-            </section>
-            <section id="projects">
-                <h2>Projects</h2>
-                <div class="projects">
-                    <div class="card">
-                        <img src="project1.jpg" alt="Project 1">
-                        <h3>Data Analysis</h3>
-                        <p>Conducted an in-depth analysis of sales data to generate actionable insights using Python.</p>
-                    </div>
-                    <div class="card">
-                        <img src="project2.jpg" alt="Project 2">
-                        <h3>Project Simulation</h3>
-                        <p>Collaborated in a simulated environment to plan and execute a project with optimal resources.</p>
-                    </div>
-                    <div class="card">
-                        <img src="project3.jpg" alt="Project 3">
-                        <h3>CRM Design</h3>
-                        <p>Developed a customer relationship model to enhance engagement and retention.</p>
-                    </div>
-                </div>
-            </section>
-            <section id="certifications">
-                <h2>Certifications</h2>
-                <div class="certifications">
-                    <div class="card">
-                        <img src="certificate1.jpg" alt="Certificate 1">
-                        <h3>Data Analysis</h3>
-                        <p>Certified in Data Analysis by Coursera.</p>
-                    </div>
-                    <div class="card">
-                        <img src="certificate2.jpg" alt="Certificate 2">
-                        <h3>Project Management</h3>
-                        <p>Certified in Project Management by PMI.</p>
-                    </div>
-                    <div class="card">
-                        <img src="certificate3.jpg" alt="Certificate 3">
-                        <h3>CRM</h3>
-                        <p>Certified in Customer Relationship Management by HubSpot Academy.</p>
-                    </div>
-                </div>
-            </section>
-            <section id="contact">
-                <h2>Contact</h2>
-                <p>Feel free to reach out via email at <a href="mailto:your.email@example.com">your.email@example.com</a>.</p>
-            </section>
-        </div>
-    </div>
-    <footer>
-        <p>&copy; 2025 B.Sc. PCM Student. All rights reserved.</p>
-    </footer>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const box = 20; // Size of each grid cell
+        const rows = canvas.height / box;
+        const cols = canvas.width / box;
+
+        let snake = [{ x: 5 * box, y: 5 * box }];
+        let direction = 'RIGHT';
+        let food = {
+            x: Math.floor(Math.random() * cols) * box,
+            y: Math.floor(Math.random() * rows) * box,
+        };
+        let score = 0;
+
+        document.addEventListener('keydown', changeDirection);
+
+        function changeDirection(event) {
+            if (event.key === 'ArrowUp' && direction !== 'DOWN') direction = 'UP';
+            if (event.key === 'ArrowDown' && direction !== 'UP') direction = 'DOWN';
+            if (event.key === 'ArrowLeft' && direction !== 'RIGHT') direction = 'LEFT';
+            if (event.key === 'ArrowRight' && direction !== 'LEFT') direction = 'RIGHT';
+        }
+
+        function drawSnake() {
+            snake.forEach((segment, index) => {
+                ctx.fillStyle = index === 0 ? 'lime' : 'green';
+                ctx.fillRect(segment.x, segment.y, box, box);
+                ctx.strokeStyle = 'black';
+                ctx.strokeRect(segment.x, segment.y, box, box);
+            });
+        }
+
+        function drawFood() {
+            ctx.fillStyle = 'red';
+            ctx.fillRect(food.x, food.y, box, box);
+            ctx.strokeStyle = 'white';
+            ctx.strokeRect(food.x, food.y, box, box);
+        }
+
+        function moveSnake() {
+            const head = { ...snake[0] };
+
+            if (direction === 'UP') head.y -= box;
+            if (direction === 'DOWN') head.y += box;
+            if (direction === 'LEFT') head.x -= box;
+            if (direction === 'RIGHT') head.x += box;
+
+            snake.unshift(head);
+
+            // Check if the snake eats the food
+            if (head.x === food.x && head.y === food.y) {
+                score++;
+                food = {
+                    x: Math.floor(Math.random() * cols) * box,
+                    y: Math.floor(Math.random() * rows) * box,
+                };
+            } else {
+                snake.pop();
+            }
+        }
+
+        function checkCollision() {
+            const head = snake[0];
+
+            // Check collision with walls
+            if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) {
+                return true;
+            }
+
+            // Check collision with itself
+            for (let i = 1; i < snake.length; i++) {
+                if (head.x === snake[i].x && head.y === snake[i].y) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        function drawScore() {
+            ctx.fillStyle = 'white';
+            ctx.font = '20px Arial';
+            ctx.fillText(`Score: ${score}`, 10, 20);
+        }
+
+        function gameLoop() {
+            if (checkCollision()) {
+                alert(`Game Over! Your score was: ${score}`);
+                document.location.reload();
+                return;
+            }
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawFood();
+            moveSnake();
+            drawSnake();
+            drawScore();
+        }
+
+        // Set a slower game speed by increasing the interval
+        setInterval(gameLoop, 150);
+    </script>
 </body>
 </html>
