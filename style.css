@@ -1,0 +1,46 @@
+:root {
+    --primary: #2ecc71;
+    --bg: #ffffff;
+    --text: #333;
+}
+
+.dark-theme {
+    --bg: #1a1a1a;
+    --text: #fff;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition: 0.3s;
+}
+
+.theme-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.projects-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.project-card {
+    background: rgba(255,255,255,0.1);
+    padding: 20px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+}
+
+form {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* Add more styles as needed */
